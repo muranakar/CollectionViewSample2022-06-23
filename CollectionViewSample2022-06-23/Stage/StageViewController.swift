@@ -49,8 +49,8 @@ class StageViewController: UIViewController {
     private let questions: [Question]
     private var levelNum: Int = 0
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         configureButtonIsEnabled()
         configureViewLabel()
     }
@@ -123,8 +123,7 @@ private extension StageViewController {
     @IBSegueAction
     func makeGameVC(coder: NSCoder, sender: Any?, segueIdentifier: String?) -> GameViewController? {
         return GameViewController(
-            coder: coder,
-            columnsNum: levelNum,
+            coder: coder, levelNum: levelNum,
             characterType: questions[0].characterType
         )
     }

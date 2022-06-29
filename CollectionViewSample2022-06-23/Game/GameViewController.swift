@@ -10,10 +10,12 @@ import UIKit
 
 class GameViewController: UIViewController {
 
+    @IBOutlet private weak var coinNumLabel: UILabel!
     @IBOutlet private weak var collectionView: UICollectionView!
     @IBOutlet private weak var correctValueLabel: UILabel!
 
     private var columnsNum: Int
+    private var levelNum: Int
     private var coin: Int
     private var randomValues: [String] = []
     private var correctRandomValue: String = ""
@@ -22,6 +24,8 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureRandomValueAndCorrectRandomValueAndCollectionViewReload(characterType: characterType)
+        configureViewCoinLabel()
+        navigationController?.setNavigationBarHidden(true, animated: true)
     }
     //        マイナス　　1×1　2×2 3×3 ....
     //        columnsNum -= 1
@@ -38,8 +42,9 @@ class GameViewController: UIViewController {
         collectionView.reloadData()
     }
 
-    required init?(coder: NSCoder,columnsNum: Int,characterType: CharacterType) {
-        self.columnsNum = columnsNum + 1
+    required init?(coder: NSCoder,levelNum: Int,characterType: CharacterType) {
+        self.levelNum = levelNum
+        self.columnsNum = levelNum + 1
         self.coin = CoinRepository.load() ?? 0
         self.characterType = characterType
         super.init(coder: coder)
@@ -47,6 +52,10 @@ class GameViewController: UIViewController {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    private func configureViewCoinLabel() {
+        coinNumLabel.text = "×  \(CoinRepository.load() ?? 0)"
     }
 }
 extension GameViewController: UICollectionViewDataSource {
@@ -71,7 +80,20 @@ extension GameViewController: UICollectionViewDelegate {
         let isCorrectValue = randomValues[indexPath.row] == correctRandomValue
         print(isCorrectValue)
         if isCorrectValue {
+            var coin = CoinRepository.load() ?? 0
+            switch characterType {
+            case .hiragana:
+                coin += 1 * (levelNum + 1)
+            case .katakana:
+                coin += 2 * (levelNum + 1)
+            case .emoji:
+                coin += 3 * (levelNum + 1)
+            case .kanzi:
+                coin += 5 * (levelNum + 1)
+            }
+            CoinRepository.save(coinNum: coin)
             configureRandomValueAndCorrectRandomValueAndCollectionViewReload(characterType: characterType)
+            configureViewCoinLabel()
         }
     }
 

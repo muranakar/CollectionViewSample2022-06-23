@@ -24,10 +24,11 @@ class StartViewController: UIViewController {
     }
 
     private var characterType: CharacterType = .hiragana
-    override func viewDidLoad() {
-        super.viewDidLoad()
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         configureButtonIsEnabled()
-        coinLabel.text = "×　\(CoinRepository.load() ?? 0)"
+        configureViewCoinLabel()
     }
 
     override func viewWillLayoutSubviews() {
@@ -73,6 +74,9 @@ class StartViewController: UIViewController {
         } else if  coin < 6300 {
             randomButton.isEnabled = false
         }
+    }
+    private func configureViewCoinLabel() {
+        coinLabel.text = "×　\(CoinRepository.load() ?? 0)"
     }
 }
 
