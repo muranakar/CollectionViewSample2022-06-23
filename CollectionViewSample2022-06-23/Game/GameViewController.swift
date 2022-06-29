@@ -13,27 +13,40 @@ class GameViewController: UIViewController {
     @IBOutlet private weak var collectionView: UICollectionView!
     @IBOutlet private weak var correctValueLabel: UILabel!
 
-    private var columnsNum = 3
+    private var columnsNum: Int
+    private var coin: Int
     private var randomValues: [String] = []
     private var correctRandomValue: String = ""
+    private var characterType: CharacterType
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureRandomValueAndCorrectRandomValueAndCollectionViewReload()
+        configureRandomValueAndCorrectRandomValueAndCollectionViewReload(characterType: characterType)
     }
-//        マイナス　　1×1　2×2 3×3 ....
-//        columnsNum -= 1
-//        configureRandomValueAndCorrectRandomValueAndCollectionViewReload()
-//        プラス　　1×1　2×2 3×3 ....
-//        columnsNum += 1
-//        configureRandomValueAndCorrectRandomValueAndCollectionViewReload()
+    //        マイナス　　1×1　2×2 3×3 ....
+    //        columnsNum -= 1
+    //        configureRandomValueAndCorrectRandomValueAndCollectionViewReload()
+    //        プラス　　1×1　2×2 3×3 ....
+    //        columnsNum += 1
+    //        configureRandomValueAndCorrectRandomValueAndCollectionViewReload()
 
-    private func configureRandomValueAndCorrectRandomValueAndCollectionViewReload() {
+    private func configureRandomValueAndCorrectRandomValueAndCollectionViewReload(characterType: CharacterType) {
         let columnsNumPow = Int(pow(Double(columnsNum), 2))
-        randomValues = Array(CsvConversion.convertFacilityInformationFromCsv(characterType: .kanzi).shuffled()[0...columnsNumPow - 1])
+        randomValues = Array(CsvConversion.convertFacilityInformationFromCsv(characterType: characterType).shuffled()[0...columnsNumPow - 1])
         correctRandomValue = randomValues.randomElement()!
         correctValueLabel.text = correctRandomValue
         collectionView.reloadData()
+    }
+
+    required init?(coder: NSCoder,columnsNum: Int,characterType: CharacterType) {
+        self.columnsNum = columnsNum + 1
+        self.coin = CoinRepository.load() ?? 0
+        self.characterType = characterType
+        super.init(coder: coder)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
 extension GameViewController: UICollectionViewDataSource {
@@ -58,7 +71,7 @@ extension GameViewController: UICollectionViewDelegate {
         let isCorrectValue = randomValues[indexPath.row] == correctRandomValue
         print(isCorrectValue)
         if isCorrectValue {
-            configureRandomValueAndCorrectRandomValueAndCollectionViewReload()
+            configureRandomValueAndCorrectRandomValueAndCollectionViewReload(characterType: characterType)
         }
     }
 
