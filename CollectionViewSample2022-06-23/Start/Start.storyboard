@@ -39,9 +39,9 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7XG-hI-psc">
-                                <rect key="frame" x="100" y="497" width="214" height="40"/>
+                                <rect key="frame" x="100" y="457" width="214" height="50"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="Kbb-ms-9OH"/>
+                                    <constraint firstAttribute="height" constant="50" id="Kbb-ms-9OH"/>
                                 </constraints>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="ひらがな">
@@ -52,7 +52,7 @@
                                 </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="HIx-Hj-E8H">
-                                <rect key="frame" x="107" y="547" width="200" height="30"/>
+                                <rect key="frame" x="107" y="517" width="200" height="30"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="014_gold" translatesAutoresizingMaskIntoConstraints="NO" id="CiC-C7-3Ll">
                                         <rect key="frame" x="0.0" y="0.0" width="100" height="30"/>
@@ -70,9 +70,9 @@
                                 </constraints>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bsy-u7-S8H">
-                                <rect key="frame" x="100" y="582" width="214" height="40"/>
+                                <rect key="frame" x="100" y="552" width="214" height="50"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="890-YE-RMo"/>
+                                    <constraint firstAttribute="height" constant="50" id="890-YE-RMo"/>
                                 </constraints>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="カタカナ">
@@ -83,7 +83,7 @@
                                 </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="hLQ-Kr-5K9">
-                                <rect key="frame" x="107" y="632" width="200" height="30"/>
+                                <rect key="frame" x="107" y="612" width="200" height="30"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="014_gold" translatesAutoresizingMaskIntoConstraints="NO" id="NBx-Aa-7Qa">
                                         <rect key="frame" x="0.0" y="0.0" width="100" height="30"/>
@@ -101,9 +101,9 @@
                                 </constraints>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CzN-HE-oY4">
-                                <rect key="frame" x="100" y="667" width="214" height="40"/>
+                                <rect key="frame" x="100" y="647" width="214" height="50"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="BiO-0y-OcN"/>
+                                    <constraint firstAttribute="height" constant="50" id="BiO-0y-OcN"/>
                                 </constraints>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="えもじ">
@@ -114,7 +114,7 @@
                                 </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="bSn-ji-RQm">
-                                <rect key="frame" x="107" y="717" width="200" height="30"/>
+                                <rect key="frame" x="107" y="707" width="200" height="30"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="014_gold" translatesAutoresizingMaskIntoConstraints="NO" id="b0O-2F-pGG">
                                         <rect key="frame" x="0.0" y="0.0" width="100" height="30"/>
@@ -132,9 +132,9 @@
                                 </constraints>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rY6-Kx-6kr">
-                                <rect key="frame" x="100" y="752" width="214" height="40"/>
+                                <rect key="frame" x="100" y="742" width="214" height="50"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="if1-YC-uUt"/>
+                                    <constraint firstAttribute="height" constant="50" id="if1-YC-uUt"/>
                                 </constraints>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="？？？">

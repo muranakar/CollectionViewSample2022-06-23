@@ -9,30 +9,38 @@
 import UIKit
 
 class GameViewController: UIViewController {
-
     @IBOutlet private weak var coinNumLabel: UILabel!
     @IBOutlet private weak var collectionView: UICollectionView!
     @IBOutlet private weak var correctValueLabel: UILabel!
 
     private var columnsNum: Int
     private var levelNum: Int
-    private var coin: Int
+    private var totalCoin: Int
+    private var oneGameGetCoin: Int = 0
     private var randomValues: [String] = []
     private var correctRandomValue: String = ""
     private var characterType: CharacterType
+    private var missCount: Int = 0
+    private var gameFinishType: GameFinishType?
+    // MARK: - タイマー関係のプロパティ
+    let time:Float = 60.0
+    var cnt:Float = 0
+    var count: Float { time - cnt }
+    var GameTimer: Timer?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         configureRandomValueAndCorrectRandomValueAndCollectionViewReload(characterType: characterType)
         configureViewCoinLabel()
         navigationController?.setNavigationBarHidden(true, animated: true)
+        GameTimer = Timer.scheduledTimer(
+            timeInterval: 1,
+            target: self,
+            selector: #selector(countDown(timer: )),
+            userInfo: nil,
+            repeats: true
+        )
     }
-    //        マイナス　　1×1　2×2 3×3 ....
-    //        columnsNum -= 1
-    //        configureRandomValueAndCorrectRandomValueAndCollectionViewReload()
-    //        プラス　　1×1　2×2 3×3 ....
-    //        columnsNum += 1
-    //        configureRandomValueAndCorrectRandomValueAndCollectionViewReload()
 
     private func configureRandomValueAndCorrectRandomValueAndCollectionViewReload(characterType: CharacterType) {
         let columnsNumPow = Int(pow(Double(columnsNum), 2))
@@ -45,7 +53,7 @@ class GameViewController: UIViewController {
     required init?(coder: NSCoder,levelNum: Int,characterType: CharacterType) {
         self.levelNum = levelNum
         self.columnsNum = levelNum + 1
-        self.coin = CoinRepository.load() ?? 0
+        self.totalCoin = CoinRepository.load() ?? 0
         self.characterType = characterType
         super.init(coder: coder)
     }
@@ -53,9 +61,57 @@ class GameViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    // MARK: - Timer関係
+    @objc func countDown(timer: Timer) {
+        //カウントを１減らす
+        cnt += 1
+        //タイマーを止める
+        if count < 0 {
+            GameTimer?.invalidate()
+            CoinRepository.save(coinNum: totalCoin)
+            gameFinishType = .timeOut
+            performSegue(withIdentifier: "result", sender: nil)
+        }
+    }
+    // MARK: - View関係　アニメーションなど
     private func configureViewCoinLabel() {
         coinNumLabel.text = "×  \(CoinRepository.load() ?? 0)"
+    }
+    // TODO: アニメーション理解していない。
+    private func configureViewCorrectAnswerImageView() {
+        let imageView = UIImageView.init(image: UIImage(systemName: "circle"))
+        imageView.tintColor = .red
+        imageView.backgroundColor = UIColor(named: "background")
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(imageView)
+        imageView.bottomAnchor.constraint(equalTo: view.bottomAnchor,constant: -60.0).isActive = true
+        imageView.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        imageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+
+        UIView.animate(withDuration: 1.0) {
+                imageView.alpha = 0.01
+        } completion: { bool in
+            imageView.removeFromSuperview()
+        }
+    }
+    private func configureViewIncorrectAnswerImageView() {
+
+        let imageView = UIImageView.init(image: UIImage(systemName: "xmark"))
+        imageView.tintColor = UIColor(named: "string")
+        imageView.backgroundColor = UIColor(named: "background")
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(imageView)
+        imageView.bottomAnchor.constraint(equalTo: view.bottomAnchor,constant: -60.0).isActive = true
+        imageView.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        imageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+
+        UIView.animate(withDuration: 1.0) {
+                imageView.alpha = 0.01
+        } completion: { bool in
+            imageView.removeFromSuperview()
+        }
     }
 }
 extension GameViewController: UICollectionViewDataSource {
@@ -68,32 +124,60 @@ extension GameViewController: UICollectionViewDataSource {
         collectionView.dequeueReusableCell(withReuseIdentifier: "cell",
                                            for: indexPath) as! CollectionViewCell
         cell.configure(text: randomValues[indexPath.row])
-        cell.layer.backgroundColor = UIColor.white.cgColor
+
         return cell
     }
 
 }
 
+private extension GameViewController {
+    @IBSegueAction
+    func makeResultVC(coder: NSCoder, sender: Any?, segueIdentifier: String?) -> ResultViewController? {
+        return ResultViewController(
+            coder: coder,gameFinishType: gameFinishType!,oneGameGetCoin: oneGameGetCoin
+        )
+    }
+
+    @IBAction
+    func backToGameViewController(segue: UIStoryboardSegue) {
+    }
+}
+
 
 extension GameViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+
         let isCorrectValue = randomValues[indexPath.row] == correctRandomValue
-        print(isCorrectValue)
         if isCorrectValue {
-            var coin = CoinRepository.load() ?? 0
+            // 正解したときの処理
             switch characterType {
             case .hiragana:
-                coin += 1 * (levelNum + 1)
+                totalCoin += 1 * (levelNum + 1)
+                oneGameGetCoin += 1 * (levelNum + 1)
             case .katakana:
-                coin += 2 * (levelNum + 1)
+                totalCoin += 2 * (levelNum + 1)
+                oneGameGetCoin += 2 * (levelNum + 1)
             case .emoji:
-                coin += 3 * (levelNum + 1)
+                totalCoin += 3 * (levelNum + 1)
+                oneGameGetCoin += 3 * (levelNum + 1)
             case .kanzi:
-                coin += 5 * (levelNum + 1)
+                totalCoin += 5 * (levelNum + 1)
+                oneGameGetCoin += 5 * (levelNum + 1)
             }
-            CoinRepository.save(coinNum: coin)
+            CoinRepository.save(coinNum: totalCoin)
             configureRandomValueAndCorrectRandomValueAndCollectionViewReload(characterType: characterType)
             configureViewCoinLabel()
+            configureViewCorrectAnswerImageView()
+        } else {
+            //　不正解だったときの処理
+            configureViewIncorrectAnswerImageView()
+            missCount += 1
+            if missCount == 5 {
+                GameTimer?.invalidate()
+                CoinRepository.save(coinNum: totalCoin)
+                gameFinishType = .missBySelection
+                performSegue(withIdentifier: "result", sender: nil)
+            }
         }
     }
 

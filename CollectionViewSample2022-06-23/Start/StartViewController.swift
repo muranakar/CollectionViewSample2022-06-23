@@ -29,6 +29,7 @@ class StartViewController: UIViewController {
         super.viewWillAppear(animated)
         configureButtonIsEnabled()
         configureViewCoinLabel()
+        navigationController?.setNavigationBarHidden(true, animated: true)
     }
 
     override func viewWillLayoutSubviews() {
